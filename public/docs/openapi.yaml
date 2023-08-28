@@ -1,0 +1,225 @@
+openapi: 3.0.3
+info:
+  title: Laravel
+  description: ''
+  version: 1.0.0
+servers:
+  -
+    url: 'http://localhost'
+paths:
+  /api/weather-sources:
+    get:
+      summary: 'Получение списка источников'
+      operationId: ''
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  data:
+                    sources:
+                      -
+                        title: Tomorrow
+                        code: tomorrow
+                      -
+                        title: WeatherAPI
+                        code: weatherApi
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      sources:
+                        type: array
+                        example:
+                          -
+                            title: Tomorrow
+                            code: tomorrow
+                          -
+                            title: WeatherAPI
+                            code: weatherApi
+                        items:
+                          type: object
+                          properties:
+                            title:
+                              type: string
+                              example: Tomorrow
+                            code:
+                              type: string
+                              example: tomorrow
+      tags:
+        - Weather
+      security: []
+  '/api/weather/{source}':
+    get:
+      summary: 'Получение погоды из источника по городу'
+      operationId: ''
+      description: ''
+      parameters:
+        -
+          in: query
+          name: city
+          description: 'Название города'
+          example: Moscow
+          required: true
+          schema:
+            type: string
+            description: 'Название города'
+            example: Moscow
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  data:
+                    weather:
+                      temperature: 12.5
+                      humidity: 74
+                      pressure: 995.55
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      weather:
+                        type: object
+                        properties:
+                          temperature:
+                            type: number
+                            example: 12.5
+                          humidity:
+                            type: integer
+                            example: 74
+                          pressure:
+                            type: number
+                            example: 995.55
+        400:
+          description: 'Wrong source'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Weather source not found'
+                properties:
+                  message:
+                    type: string
+                    example: 'Weather source not found'
+        422:
+          description: 'Validation failed'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'The city field is required.'
+                  errors:
+                    city:
+                      - 'The city field is required.'
+                properties:
+                  message:
+                    type: string
+                    example: 'The city field is required.'
+                  errors:
+                    type: object
+                    properties:
+                      city:
+                        type: array
+                        example:
+                          - 'The city field is required.'
+                        items:
+                          type: string
+      tags:
+        - Weather
+      security: []
+    parameters:
+      -
+        in: path
+        name: source
+        description: Источник
+        example: tomorrow
+        required: true
+        schema:
+          type: string
+  /api/weather-aggregate:
+    get:
+      summary: 'Получение среднего показателя погоды по всем источникам'
+      operationId: ''
+      description: ''
+      parameters:
+        -
+          in: query
+          name: city
+          description: 'Название города'
+          example: Moscow
+          required: true
+          schema:
+            type: string
+            description: 'Название города'
+            example: Moscow
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  data:
+                    weather:
+                      temperature: 12.75
+                      humidity: 78
+                      pressure: 1004.28
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      weather:
+                        type: object
+                        properties:
+                          temperature:
+                            type: number
+                            example: 12.75
+                          humidity:
+                            type: integer
+                            example: 78
+                          pressure:
+                            type: number
+                            example: 1004.28
+        422:
+          description: 'Validation failed'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'The city field is required.'
+                  errors:
+                    city:
+                      - 'The city field is required.'
+                properties:
+                  message:
+                    type: string
+                    example: 'The city field is required.'
+                  errors:
+                    type: object
+                    properties:
+                      city:
+                        type: array
+                        example:
+                          - 'The city field is required.'
+                        items:
+                          type: string
+      tags:
+        - Weather
+      security: []
+tags:
+  -
+    name: Weather
+    description: ''
